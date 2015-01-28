@@ -207,6 +207,7 @@ sb () {
   fi
 }
 
-fish_edit () {
-  sb ~/.config/fish/config.fish
-}
+fish_edit () sb ~/.config/fish/config.fish
+
+zsh_edit () sb $ZSH/custom/plugins/functions/functions.plugin.zsh
+zsh_dir () $ZSH/custom/plugins/
