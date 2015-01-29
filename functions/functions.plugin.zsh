@@ -44,7 +44,7 @@ s () {
 
 t () {
   if zeus_on; then
-    if [ '$#' -gt 0 ]; then
+    if [ "$#" -gt 0 ]; then
       zeus test "$@"
     else
       zeus test spec
@@ -207,7 +207,10 @@ sb () {
   fi
 }
 
+circle () open https://circleci.com/gh/sashafklein/planit
+
 fish_edit () sb ~/.config/fish/config.fish
 
 zsh_edit () sb $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
+zshrc () sb ~/.zshrc
