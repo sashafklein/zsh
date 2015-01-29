@@ -4,6 +4,15 @@
 
 z () zeus start
 
+zr () {
+  if zeus_on; then
+    zeus "$@"
+  else
+    echo "Zeus is not running"
+    "$@"
+  fi
+}
+
 rmz () rm .zeus.sock
 
 rr () {
@@ -22,16 +31,9 @@ zeus_on () {
   fi
 }
 
-mg () r db:migrate "$@"
+mg () { r db:migrate "$@" }
 
-tprep () {
-  if zeus_on; then
-    zeus rake db:test:prepare "$@"
-  else
-    echo "Zeus is not running"
-    rake db:test:prepare "$@"
-  fi
-}
+tprep () { r db:test:prepare "$@" }
 
 s () { 
   if zeus_on; then
@@ -43,32 +45,16 @@ s () {
 }
 
 t () {
-  if zeus_on; then
-    if [ "$#" -gt 0 ]; then
-      zeus test "$@"
-    else
-      zeus test spec
-    fi
+  if [ "$#" -gt 0 ]; then
+    zr rspec "$@"
   else
-    echo "Zeus is not running"
-    if [ "$#" -gt 0 ]; then
-      rspec "$@"
-    else
-      rspec spec
-    fi
+    zr rspec spec
   fi
 }
 
 tt () zeus rspec --tag $1 spec
 
-r () {
-  if zeus_on; then
-    zeus rake "$@"
-  else
-    echo "Zeus is not running"
-    rake "$@"
-  fi
-}
+r () { zr rake "$@" }
 
 c () {
   if zeus_on; then
@@ -76,23 +62,6 @@ c () {
   else
     echo "Zeus is not running"
     rails c "$@"
-  fi
-}
-
-jt () {
-  if zeus_on; then
-    if [ "$#" -gt 0 ]; then
-      zeus tr spec:javascript SPEC="$@"
-    else
-      zeus tr spec:javascript
-    fi
-  else
-    echo "Zeus is not running"
-    if [ "$#" -gt 0 ]; then
-      rake spec:javascript RAILS_ENV=test SPEC="$@"
-    else
-      rake spec:javascript RAILS_ENV=test
-    fi
   fi
 }
 
