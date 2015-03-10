@@ -65,12 +65,22 @@ c () {
   fi
 }
 
-kill_zeus () { kill -9 $(ps -x | grep 'zeus' | awk '{print $1}') }
+jt () {
+  if ps aux | grep -v grep | grep 'zeus command: server'; then
+    open http://localhost:3000/teaspoon/default
+  else
+    echo "Spinning up the required server. Try again in another tab."
+    s
+  fi
+}
+
+zk () { kill -9 $(ps -x | grep 'zeus' | awk '{print $1}') }
 
 # ##############################
 # ############ GIT #############
 # ##############################
 
+ktask () { kill -9 $(ps -x | grep "$@" | awk '{print $1}') }
 gcurrent () git rev-parse --abbrev-ref HEAD
 
 gclean! () git clean -f -d
@@ -177,6 +187,9 @@ sb () {
     sublime .
   fi
 }
+
+njournal () ruby ~/Documents/journal/new.rb
+rjournal () sb ~/Documents/journal
 
 circle () open https://circleci.com/gh/sashafklein/planit
 
