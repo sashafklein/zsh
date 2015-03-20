@@ -192,6 +192,7 @@ njournal () ruby ~/Documents/journal/new.rb
 rjournal () sb ~/Documents/journal
 
 circle () open https://circleci.com/gh/sashafklein/planit
+rollbar () open https://rollbar.com/sashafklein/Planit/
 
 fish_edit () sb ~/.config/fish/config.fish
 
