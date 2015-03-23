@@ -169,6 +169,11 @@ bloc () f 'bloc/bloc'
 # ########### OTHER ############
 # ##############################
 
+prod_oink () {
+  heroku logs -n 2000 > log/production.log
+  cat log/production.log | cut -c 46- | grep 'rails\[' > log/production-oink.log
+  oink --threshold="$@" log/production-oink.log
+}
 
 tasks () { ps aux | grep "$@" }
 
