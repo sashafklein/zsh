@@ -181,7 +181,23 @@ b () bundle "$@"
 
 fs () foreman start "$@"
 
-hcon () heroku run rails console
+hcon () heroku run --app planit-app rails console
+hmain_off () heroku maintenance:off --app planit-app
+hmain_on () heroku maintenance:on --app planit-app
+hconfig () {
+  if [ "$#" -gt 0 ]; then
+    heroku config --app planit-app 
+  else
+    heroku config --app planit-app
+  fi
+}
+hlogs () {
+  if [ "$#" -gt 0 ]; then
+    heroku logs --app planit-app "$@"
+  else
+    heroku logs --app planit-app 
+  fi
+}
 
 dtest () tail -f diagnostic.txt
 
