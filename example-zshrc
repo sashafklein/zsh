@@ -9,10 +9,10 @@ zstyle ':completion:*' menu select
 source $(brew --prefix nvm)/nvm.sh
 
 path=(
-  /Users/sasha/.rvm/gems/ruby-2.2.0
-  /Users/sasha/.rvm/gems/ruby-2.2.0/bin
-  /Users/sasha/.rvm/gems/ruby-2.2.0@global/bin
-  /Users/sasha/.rvm/rubies/ruby-2.2.0/bin
+  /Users/sasha/.rvm/gems/ruby-2.2.2
+  /Users/sasha/.rvm/gems/ruby-2.2.2/bin
+  /Users/sasha/.rvm/gems/ruby-2.2.2@global/bin
+  /Users/sasha/.rvm/rubies/ruby-2.2.2/bin
   /Users/sasha/.rvm/bin
   /usr/local/bin
   /usr/bin
