@@ -8,8 +8,10 @@ zstyle ':completion:*' menu select
 
 source $(brew --prefix nvm)/nvm.sh
 
+export GEM_PATH=/Users/sasha/.rvm/gems/ruby-2.2.2
+export GEM_HOME=/Users/sasha/.rvm/gems/ruby-2.2.2
+
 path=(
-  /Users/sasha/.rvm/gems/ruby-2.2.2
   /Users/sasha/.rvm/gems/ruby-2.2.2/bin
   /Users/sasha/.rvm/gems/ruby-2.2.2@global/bin
   /Users/sasha/.rvm/rubies/ruby-2.2.2/bin
