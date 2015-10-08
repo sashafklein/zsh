@@ -186,7 +186,7 @@ hmain_off () heroku maintenance:off --app planit-app
 hmain_on () heroku maintenance:on --app planit-app
 hconfig () {
   if [ "$#" -gt 0 ]; then
-    heroku config --app planit-app 
+    heroku config:"$@" --app planit-app
   else
     heroku config --app planit-app
   fi
