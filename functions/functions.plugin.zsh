@@ -89,7 +89,7 @@ gd () git diff "$@"
 
 gds () git diff --staged "$@"
 
-gdh () git diff HEAD^
+gdh () git diff HEAD\^
 
 gr () git rebase "$@"
 
@@ -97,7 +97,7 @@ gri () gr -i "$@"
 
 grc () gr --continue
 
-gback () git reset HEAD^
+gback () git reset HEAD\^
 
 gh () hub browse
 
