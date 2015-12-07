@@ -150,6 +150,8 @@ grh () git reset --hard "$@"
 
 gbdelete () git push origin --delete "$@"
 
+gulps () gulp serve
+
 
 # ###############################
 # ######## CD SHORTCUTS #########
