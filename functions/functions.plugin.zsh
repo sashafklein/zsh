@@ -161,7 +161,7 @@ fish_dir () cd ~/.config/fish/
 
 code () cd $HOME/code/"$@"
 
-red () code redshift
+red () code redshift/"$@"
 
 f () code "$@"
 
