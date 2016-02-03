@@ -129,10 +129,14 @@ gl () git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%c
 gco () git checkout "$@"
 
 gcoi () {
-  gco dev
-  gp
-  gco -b "issue#$@"
-  gpush
+  if gb | grep "#$@"; then
+    gco "issue#$@"
+  else
+    gco dev
+    gp
+    gco -b "issue#$@"
+    gpush
+  fi
 }
 
 gcom () git checkout master
