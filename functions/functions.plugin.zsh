@@ -128,6 +128,13 @@ gl () git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%c
 
 gco () git checkout "$@"
 
+gcoi () {
+  gco dev
+  gp
+  gco -b "issue#$@"
+  gpush
+}
+
 gcom () git checkout master
 
 gpush () git push "$@"
@@ -149,8 +156,6 @@ gcpick () git cherry-pick "$@"
 grh () git reset --hard "$@"
 
 gbdelete () git push origin --delete "$@"
-
-gulps () gulp serve
 
 
 # ###############################
