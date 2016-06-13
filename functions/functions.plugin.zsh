@@ -17,7 +17,7 @@ rmz () rm .zeus.sock
 
 rr () {
   if [ "$#" -gt 0 ]; then
-    r routes | grep "$@" 
+    r routes | grep "$@"
   else
     r routes
   fi
@@ -35,7 +35,7 @@ mg () { r db:migrate "$@" }
 
 tprep () { r db:test:prepare "$@" }
 
-s () { 
+s () {
   if zeus_on; then
     zeus s
   else
@@ -45,10 +45,18 @@ s () {
 }
 
 t () {
-  if [ "$#" -gt 0 ]; then
-    zr rspec "$@"
+  if contains `pwd` ams; then
+    if [ "$#" -gt 0 ]; then
+      npm test "test/$@Test.js"
+    else
+      npm test
+    fi
   else
-    zr rspec spec
+    if [ "$#" -gt 0 ]; then
+      zr rspec "$@"
+    else
+      zr rspec spec
+    fi
   fi
 }
 
@@ -161,6 +169,11 @@ grh () git reset --hard "$@"
 
 gbdelete () git push origin --delete "$@"
 
+gprune () {
+  foo=gb
+  echo foo
+}
+
 
 # ###############################
 # ######## CD SHORTCUTS #########
@@ -208,7 +221,7 @@ hlogs () {
   if [ "$#" -gt 0 ]; then
     heroku logs "$@"
   else
-    heroku logs 
+    heroku logs
   fi
 }
 
@@ -222,6 +235,8 @@ sb () {
   fi
 }
 
+iospackage() react-native bundle --platform ios --dev false --entry-file index.ios.js --bundle-output iOS/main.jsbundle
+
 njournal () ruby ~/Documents/journal/new.rb
 rjournal () sb ~/Documents/journal
 
@@ -233,3 +248,14 @@ fish_edit () sb ~/.config/fish/config.fish
 zsh_edit () sb $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
 zshrc () sb ~/.zshrc
+
+contains () {
+    string="$1"
+    substring="$2"
+    if test "${string#*$substring}" != "$string"
+    then
+      return 0    # $substring is in $string
+    else
+      return 1    # $substring is not in $string
+    fi
+}
