@@ -8,7 +8,6 @@ zr () {
   if zeus_on; then
     zeus "$@"
   else
-    echo "Zeus is not running"
     "$@"
   fi
 }
@@ -27,6 +26,7 @@ zeus_on () {
   if ps aux | grep -v grep | grep 'zeus slave: development_environment'; then
     true
   else
+    echo "Zeus is not running"
     false
   fi
 }
@@ -39,7 +39,6 @@ s () {
   if zeus_on; then
     zeus s
   else
-    echo "Zeus is not running"
     rails s
   fi
 }
@@ -47,7 +46,10 @@ s () {
 t () {
   if contains `pwd` ams; then
     if [ "$#" -gt 0 ]; then
-      npm test "test/$@Test.js"
+      for option in `find test/**/$@Test.js`; do
+        echo Running "$option"
+        npm test "$option"
+      done
     else
       npm test
     fi
@@ -68,7 +70,6 @@ c () {
   if zeus_on; then
     zeus c "$@"
   else
-    echo "Zeus is not running"
     rails c "$@"
   fi
 }
