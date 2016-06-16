@@ -156,7 +156,13 @@ gb () git branch "$@"
 
 gbd () git branch -d "$@"
 
-gc () git commit "$@"
+gc () {
+  if [ "$#" -gt 1 ]; then
+    git commit "$@"
+  else
+    git commit -m "$@"
+  fi
+}
 
 gca () gc --amend
 
