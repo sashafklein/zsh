@@ -48,10 +48,10 @@ t () {
     if [ "$#" -gt 0 ]; then
       for option in `find test/**/$@Test.js`; do
         echo Running "$option"
-        npm test "$option"
+        npm run t "$option"
       done
     else
-      npm test
+      npm run t
     fi
   else
     if [ "$#" -gt 0 ]; then
@@ -265,4 +265,9 @@ contains () {
     else
       return 1    # $substring is not in $string
     fi
+}
+
+new_test () {
+  touch "$@Test.js"
+  echo "import React from 'react';\nimport test from 'ava';\nimport { shallow } from 'enzyme';\n\nimport { $@ } from '../../src/components/$@';" >> $@Test.js
 }
