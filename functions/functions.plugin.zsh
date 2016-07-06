@@ -164,7 +164,7 @@ gc () {
   fi
 }
 
-gca () gc --amend
+gca () git commit --amend
 
 grb () git rebase "$@"
 
