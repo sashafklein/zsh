@@ -266,8 +266,3 @@ contains () {
       return 1    # $substring is not in $string
     fi
 }
-
-new_test () {
-  touch "$@Test.js"
-  echo "import React from 'react';\nimport test from 'ava';\nimport { shallow } from 'enzyme';\n\nimport { $@ } from '../../src/components/$@';" >> $@Test.js
-}
