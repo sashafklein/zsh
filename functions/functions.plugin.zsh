@@ -74,15 +74,6 @@ c () {
   fi
 }
 
-jt () {
-  if ps aux | grep -v grep | grep 'zeus command: server'; then
-    open http://localhost:3000/teaspoon/default
-  else
-    echo "Spinning up the required server. Try again in another tab."
-    s
-  fi
-}
-
 zk () { kill -9 $(ps -x | grep 'zeus' | awk '{print $1}') }
 
 # ##############################
@@ -186,27 +177,15 @@ gprune () {
 # ######## CD SHORTCUTS #########
 # ###############################
 
-fish_dir () cd ~/.config/fish/
-
 code () cd $HOME/code/"$@"
 
 red () code redshift/"$@"
 
 f () code "$@"
 
-plan () f planit/"$@"
-
-bloc () f 'bloc/bloc'
-
 # ##############################
 # ########### OTHER ############
 # ##############################
-
-prod_oink () {
-  heroku logs -n 2000 > log/production.log
-  cat log/production.log | cut -c 46- | grep 'rails\[' > log/production-oink.log
-  oink --threshold="$@" log/production-oink.log
-}
 
 tasks () { ps aux | grep "$@" }
 
@@ -224,6 +203,7 @@ hconfig () {
     heroku config
   fi
 }
+
 hlogs () {
   if [ "$#" -gt 0 ]; then
     heroku logs "$@"
@@ -243,14 +223,6 @@ sb () {
 }
 
 iospackage() react-native bundle --platform ios --dev false --entry-file index.ios.js --bundle-output iOS/main.jsbundle
-
-njournal () ruby ~/Documents/journal/new.rb
-rjournal () sb ~/Documents/journal
-
-circle () open https://circleci.com/gh/sashafklein/planit
-rollbar () open https://rollbar.com/sashafklein/Planit/
-
-fish_edit () sb ~/.config/fish/config.fish
 
 zsh_edit () sb $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
