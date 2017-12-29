@@ -1,43 +1,15 @@
+
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
 export ZSH=$HOME/.oh-my-zsh
-
 ZSH_THEME="robbyrussell"
-ZSH_CUSTOM=$HOME/.oh-my-zsh/custom
 
-zsh-history-substring-search)
-
-zstyle ':completion:*' menu select
-
-source $(brew --prefix nvm)/nvm.sh
-
-export GEM_PATH=/Users/sasha/.rvm/gems/ruby-2.2.2
-export GEM_HOME=/Users/sasha/.rvm/gems/ruby-2.2.2
-
-path=(
-  /Users/sasha/.rvm/gems/ruby-2.2.2/bin
-  /Users/sasha/.rvm/gems/ruby-2.2.2@global/bin
-  /Users/sasha/.rvm/rubies/ruby-2.2.2/bin
-  /Users/sasha/.rvm/bin
-  /usr/local/bin
-  /usr/bin
-  /bin
-  /usr/sbin
-  /sbin
-  /usr/local/git/bin
+plugins=(
+  git,
+  functions
 )
 
-plugins=(functions github zsh-syntax-highlighting
-
-fpath=(/usr/local/share/zsh-completions $fpath)
-
 source $ZSH/oh-my-zsh.sh
-source /Users/sasha/.zsh-autosuggestions/autosuggestions.zsh
 
-zle-line-init() {
-  zle autosuggest-start
-}
-
-zle -N zle-line-init
-
-# use ctrl+t to toggle autosuggestions(hopefully this wont be needed as
-# zsh-autosuggestions is designed to be unobtrusive)
-bindkey '^T' autosuggest-toggle
+# ssh
+export SSH_KEY_PATH="~/.ssh/rsa_id"
