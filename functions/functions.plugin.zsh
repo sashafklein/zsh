@@ -1,81 +1,3 @@
-##############################
-######### ZEUS BASED #########
-##############################
-
-z () zeus start
-
-zr () {
-  if zeus_on; then
-    zeus "$@"
-  else
-    "$@"
-  fi
-}
-
-rmz () rm .zeus.sock
-
-rr () {
-  if [ "$#" -gt 0 ]; then
-    r routes | grep "$@"
-  else
-    r routes
-  fi
-}
-
-zeus_on () {
-  if ps aux | grep -v grep | grep 'zeus slave: development_environment'; then
-    true
-  else
-    echo "Zeus is not running"
-    false
-  fi
-}
-
-mg () { r db:migrate "$@" }
-
-tprep () { r db:test:prepare "$@" }
-
-s () {
-  if zeus_on; then
-    zeus s
-  else
-    rails s
-  fi
-}
-
-t () {
-  if contains `pwd` ams; then
-    if [ "$#" -gt 0 ]; then
-      for option in `find test/**/$@Test.js`; do
-        echo Running "$option"
-        npm run t "$option"
-      done
-    else
-      npm run t
-    fi
-  else
-    if [ "$#" -gt 0 ]; then
-      zr rspec "$@"
-    else
-      zr rspec spec
-    fi
-  fi
-}
-
-tt () zeus rspec --tag $1 spec
-
-r () { zr rake "$@" }
-
-c () {
-  if zeus_on; then
-    zeus c "$@"
-  else
-    rails c "$@"
-  fi
-}
-
-zk () { kill -9 $(ps -x | grep 'zeus' | awk '{print $1}') }
-
 # ##############################
 # ############ GIT #############
 # ##############################
@@ -89,7 +11,7 @@ gd () git diff "$@"
 
 gds () git diff --staged "$@"
 
-gdh () git diff HEAD\^
+gdh () git diff HEAD\^ "$@"
 
 gr () git rebase "$@"
 
@@ -139,8 +61,6 @@ gcoi () {
   fi
 }
 
-gcom () git checkout master
-
 gpush () git push "$@"
 
 gb () git branch "$@"
@@ -167,12 +87,6 @@ grh () git reset --hard "$@"
 
 gbdelete () git push origin --delete "$@"
 
-gprune () {
-  foo=gb
-  echo foo
-}
-
-
 # ###############################
 # ######## CD SHORTCUTS #########
 # ###############################
@@ -187,32 +101,12 @@ f () code "$@"
 # ########### OTHER ############
 # ##############################
 
+# Prints out tree of all directories below this one
+tree () {
+  ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'
+}
+
 tasks () { ps aux | grep "$@" }
-
-b () bundle "$@"
-
-fs () foreman start "$@"
-
-hcon () heroku run rails console
-hmain_off () heroku maintenance:off
-hmain_on () heroku maintenance:on
-hconfig () {
-  if [ "$#" -gt 0 ]; then
-    heroku config:"$@"
-  else
-    heroku config
-  fi
-}
-
-hlogs () {
-  if [ "$#" -gt 0 ]; then
-    heroku logs "$@"
-  else
-    heroku logs
-  fi
-}
-
-dtest () tail -f diagnostic.txt
 
 sb () {
   if [ "$#" -gt 0 ]; then
@@ -221,8 +115,6 @@ sb () {
     sublime .
   fi
 }
-
-iospackage() react-native bundle --platform ios --dev false --entry-file index.ios.js --bundle-output iOS/main.jsbundle
 
 zsh_edit () sb $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
