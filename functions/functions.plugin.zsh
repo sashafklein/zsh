@@ -21,7 +21,7 @@ grc () gr --continue
 
 gback () git reset HEAD\^
 
-gh () hub browse
+gh () git open
 
 gac () {
   ga
@@ -87,15 +87,43 @@ grh () git reset --hard "$@"
 
 gbdelete () git push origin --delete "$@"
 
+gprune () {
+  foo=gb
+  echo foo
+}
+
+glt () {
+  git describe --abbrev=0 --tags
+}
+
+glc () {
+  git rev-parse --short HEAD
+}
+
+go () {
+  git open
+}
+
+
 # ###############################
 # ######## CD SHORTCUTS #########
 # ###############################
 
 code () cd $HOME/code/"$@"
 
-red () code redshift/"$@"
+work () code redshift/"$@"
 
 f () code "$@"
+
+n () cd $HOME/Dropbox\ \(Personal\)/Notes/"$@"
+
+wn () n Work/"$@"
+
+h () cd $HOME/"$@"
+
+desk () h Desktop/"$@"
+drop () h Dropbox\ \(Personal\)/
+wdrop () h Dropbox\ \(Redshift\)/"$@"
 
 # ##############################
 # ########### OTHER ############
@@ -108,17 +136,27 @@ tree () {
 
 tasks () { ps aux | grep "$@" }
 
-sb () {
+at () {
   if [ "$#" -gt 0 ]; then
-    sublime "$@"
+    atom "$@"
   else
-    sublime .
+    atom .
   fi
 }
 
-zsh_edit () sb $ZSH/custom/plugins/functions/functions.plugin.zsh
+# Replace atom with sublime to return.
+sb () {
+  echo 'Using ATOM.'
+  if [ "$#" -gt 0 ]; then
+    atom "$@"
+  else
+    atom .
+  fi
+}
+
+zsh_edit () at $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
-zshrc () sb ~/.zshrc
+zshrc () at ~/.zshrc
 
 contains () {
     string="$1"
@@ -129,4 +167,17 @@ contains () {
     else
       return 1    # $substring is not in $string
     fi
+}
+
+##
+## FFMPEG
+##
+
+flacToMP3 () {
+  mkdir flac
+  for file in ./*.flac; do
+    filename="${file%.*}"
+    ffmpeg -i "${file}" -ab 320k -map_metadata 0 -id3v2_version 3 "${filename}.mp3";
+    mv "${file}" flac
+  done
 }
