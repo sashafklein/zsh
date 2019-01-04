@@ -111,7 +111,7 @@ go () {
 
 code () cd $HOME/code/"$@"
 
-work () code redshift/"$@"
+work () code work/"$@"
 
 f () code "$@"
 
