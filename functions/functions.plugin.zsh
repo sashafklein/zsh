@@ -7,6 +7,16 @@ gcurrent () git rev-parse --abbrev-ref HEAD
 
 gclean! () git clean -f -d
 
+# Nuclear option -- remove all changes
+gnuke! () {
+  gco .
+  git reset HEAD .
+  gclean!
+  git reset HEAD .
+  gco .
+  gclean!
+}
+
 gd () git diff "$@"
 
 gds () git diff --staged "$@"
@@ -77,6 +87,8 @@ gc () {
 
 gca () git commit --amend
 
+gcaf () gca --no-edit
+
 grb () git rebase "$@"
 
 g () git "$@"
@@ -115,7 +127,7 @@ work () code work/"$@"
 
 f () code "$@"
 
-n () cd $HOME/Dropbox\ \(Personal\)/Notes/"$@"
+n () cd $HOME/Dropbox/Notes/"$@"
 
 wn () n Work/"$@"
 
@@ -169,6 +181,10 @@ contains () {
     fi
 }
 
+
+ngrk () {
+  ~/ngrok "$@"
+}
 ##
 ## FFMPEG
 ##
@@ -179,5 +195,18 @@ flacToMP3 () {
     filename="${file%.*}"
     ffmpeg -i "${file}" -ab 320k -map_metadata 0 -id3v2_version 3 "${filename}.mp3";
     mv "${file}" flac
+  done
+}
+
+##
+## ImageMagick
+##
+
+grayScale () {
+  mkdir grayscale
+  for file in ./*"$arg"; do
+    filename=${file:1}
+    newPath="./grayscale${filename}"
+    convert "${file}" -fx '(r+g+b)/3' -colorspace Gray $newPath
   done
 }
