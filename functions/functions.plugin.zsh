@@ -87,7 +87,7 @@ gc () {
 
 gca () git commit --amend
 
-gcaf () gca --no-edit
+gcaf () git commit --amend --no-edit
 
 grb () git rebase "$@"
 
@@ -121,11 +121,20 @@ go () {
 # ######## CD SHORTCUTS #########
 # ###############################
 
-code () cd $HOME/code/"$@"
+vs () {
+  if [ "$#" -gt 0 ]; then
+    code "$@"
+  else
+    code .
+  fi
+}
 
-work () code work/"$@"
+# code () cd $HOME/code/"$@"
 
-f () code "$@"
+f () cd $HOME/code/"$@"
+
+work () f work/"$@"
+
 
 n () cd $HOME/Dropbox/Notes/"$@"
 
@@ -149,10 +158,14 @@ tree () {
 tasks () { ps aux | grep "$@" }
 
 at () {
+  co "$@"
+}
+
+co () {
   if [ "$#" -gt 0 ]; then
-    atom "$@"
+    code "$@"
   else
-    atom .
+    code .
   fi
 }
 
