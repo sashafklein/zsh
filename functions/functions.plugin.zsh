@@ -129,8 +129,6 @@ vs () {
   fi
 }
 
-# code () cd $HOME/code/"$@"
-
 f () cd $HOME/code/"$@"
 
 work () f work/"$@"
@@ -169,14 +167,16 @@ co () {
   fi
 }
 
-# Replace atom with sublime to return.
-sb () {
-  echo 'Using ATOM.'
+y () {
   if [ "$#" -gt 0 ]; then
-    atom "$@"
+    yarn "$@"
   else
-    atom .
+    yarn
   fi
+}
+
+ys () {
+  yarn start
 }
 
 zsh_edit () at $ZSH/custom/plugins/functions/functions.plugin.zsh
@@ -198,6 +198,7 @@ contains () {
 ngrk () {
   ~/ngrok "$@"
 }
+
 ##
 ## FFMPEG
 ##
