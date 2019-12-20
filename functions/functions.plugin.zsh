@@ -116,6 +116,10 @@ go () {
   git open
 }
 
+gwip () {
+ git commit --no-verify -m 'WIP'
+}
+
 
 # ###############################
 # ######## CD SHORTCUTS #########
