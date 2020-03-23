@@ -140,7 +140,9 @@ work () f work/"$@"
 
 n () cd $HOME/Dropbox/Notes/"$@"
 
-wn () n Work/"$@"
+wn_dir () n Work/"$@"
+
+wn () v $HOME/Dropbox/Notes/Work
 
 h () cd $HOME/"$@"
 
