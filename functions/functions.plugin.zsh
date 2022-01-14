@@ -48,7 +48,16 @@ ga () {
   fi
 }
 
-gp () git pull "$@"
+gp () {
+  # For Unchained
+  if [[ ${PWD:A} =~ "unchained" ]]; then
+    br=$(git branch --show-current)
+    echo "git pull upstream ${br}"
+    git pull upstream "${br}"
+  else 
+    git pull "$@"
+  fi
+}
 
 gs () git status "$@"
 
@@ -135,7 +144,7 @@ vs () {
 
 f () cd $HOME/code/"$@"
 
-work () f work/"$@"
+work () f unchained/"$@"
 
 
 n () cd $HOME/Dropbox/Notes/"$@"
@@ -148,7 +157,22 @@ h () cd $HOME/"$@"
 
 desk () h Desktop/"$@"
 drop () h Dropbox\ \(Personal\)/
-wdrop () h Dropbox\ \(Redshift\)/"$@"
+
+# ##############################
+# ######### UNCHAINED ##########
+# ##############################
+
+du () {
+  source environment.sh && docker-compose down && sleep 1 && docker-compose up trefoil-setup && sleep 1 && docker-compose up trefoil-local
+}
+
+emu-shell () {
+  cd ~/code/unchained/trezor-firmware && python3 -m poetry shell
+}
+
+emu () {
+  cd core && ./emu.py --mnemonic 'merge alley lucky axis penalty manage latin gasp virus captain wheel deal chase fragile chapter boss zero dirt stadium tooth physical valve kid plunge'
+}
 
 # ##############################
 # ########### OTHER ############
