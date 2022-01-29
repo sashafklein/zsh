@@ -166,6 +166,14 @@ du () {
   source environment.sh && docker-compose down && sleep 1 && docker-compose up trefoil-setup && sleep 1 && docker-compose up trefoil-local
 }
 
+dd () {
+  source environment.sh && docker-compose down
+}
+
+ds () {
+  source environment.sh && docker-compose run trefoil-setup python
+}
+
 emu-shell () {
   cd ~/code/unchained/trezor-firmware && python3 -m poetry shell
 }
