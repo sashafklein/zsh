@@ -147,7 +147,7 @@ f () cd $HOME/code/"$@"
 work () f unchained/"$@"
 
 
-n () cd $HOME/Dropbox/Notes/"$@"
+notes () cd $HOME/Dropbox/Notes/"$@"
 
 wn_dir () n Work/"$@"
 
@@ -207,6 +207,14 @@ co () {
 
 v () {
   co "$@"
+}
+
+n () {
+  if [[ ${PWD:A} =~ "unchained/web" ]]; then
+    NODE_OPTIONS=--openssl-legacy-provider npm run "$@"
+  else 
+    npm run "$@"
+  fi
 }
 
 y () {
