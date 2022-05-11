@@ -87,10 +87,14 @@ gb () git branch "$@"
 gbd () git branch -d "$@"
 
 gc () {
-  if [ "$#" -gt 1 ]; then
-    git commit "$@"
+  if [ "$#" -gt 0 ]; then
+    if [ "$#" -gt 1 ]; then
+      git commit "$@"
+    else
+      git commit -m "$@"
+    fi
   else
-    git commit -m "$@"
+    git commit
   fi
 }
 
@@ -107,11 +111,6 @@ gcpick () git cherry-pick "$@"
 grh () git reset --hard "$@"
 
 gbdelete () git push origin --delete "$@"
-
-gprune () {
-  foo=gb
-  echo foo
-}
 
 glt () {
   git describe --abbrev=0 --tags
@@ -133,14 +132,6 @@ gwip () {
 # ###############################
 # ######## CD SHORTCUTS #########
 # ###############################
-
-vs () {
-  if [ "$#" -gt 0 ]; then
-    code "$@"
-  else
-    code .
-  fi
-}
 
 f () cd $HOME/code/"$@"
 
@@ -193,10 +184,6 @@ tree () {
 
 tasks () { ps aux | grep "$@" }
 
-at () {
-  co "$@"
-}
-
 co () {
   if [ "$#" -gt 0 ]; then
     code "$@"
@@ -210,11 +197,19 @@ v () {
 }
 
 n () {
-  if [[ ${PWD:A} =~ "unchained/web" ]]; then
-    NODE_OPTIONS=--openssl-legacy-provider npm run "$@"
-  else 
-    npm run "$@"
+  if [ "$#" -gt 0 ]; then
+    npm "$@"
+  else
+    npm install
   fi
+}
+
+nr () {
+  n run "$@"
+}
+
+nnuke () {
+  rm -rf node_modules && rm package-lock.json
 }
 
 y () {
@@ -229,9 +224,9 @@ ys () {
   yarn start
 }
 
-zsh_edit () at $ZSH/custom/plugins/functions/functions.plugin.zsh
+zsh_edit () v $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
-zshrc () at ~/.zshrc
+zshrc () v ~/.zshrc
 
 contains () {
     string="$1"
