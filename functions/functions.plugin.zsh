@@ -98,7 +98,13 @@ gc () {
   fi
 }
 
-gca () git commit --amend
+gca () {
+  if [ "$#" -gt 0 ]; then
+    git commit --amend "$@"
+  else
+    git commit --amend
+  fi
+}
 
 gcaf () git commit --amend --no-edit
 
@@ -153,11 +159,11 @@ drop () h Dropbox\ \(Personal\)/
 # ######### UNCHAINED ##########
 # ##############################
 
-du () {
+dockup () {
   source environment.sh && docker-compose down && sleep 1 && docker-compose up trefoil-setup && sleep 1 && docker-compose up trefoil-local
 }
 
-dd () {
+dockdown () {
   source environment.sh && docker-compose down
 }
 
@@ -226,6 +232,22 @@ ys () {
 
 zsh_edit () v $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
+zsh_refresh () source ~/.zshrc
+zsh_push ()  {
+  if [ "$#" -gt 0 ]; then
+    $PWD=pwd
+    zsh_dir
+    ga
+    gc -m "$@"
+    cd "$PWD"
+  else
+    $PWD=pwd
+    zsh_dir
+    ga
+    gc -m "Updated ZSH functions"
+    cd "$PWD"
+  fi
+}
 zshrc () v ~/.zshrc
 
 contains () {
