@@ -239,13 +239,13 @@ zsh_push ()  {
     zsh_dir
     ga
     gc -m "$@"
-    cd "$PWD"
+    $PWD
   else
     $PWD=pwd
     zsh_dir
     ga
     gc -m "Updated ZSH functions"
-    cd "$PWD"
+    $PWD
   fi
 }
 zshrc () v ~/.zshrc
