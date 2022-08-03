@@ -65,6 +65,8 @@ gsp () git stash pop
 
 gss () git stash save
 
+grs () git restore --staged "$@"
+
 gl () git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "$@"
 
 gco () git checkout "$@"
@@ -244,6 +246,7 @@ zsh_push ()  {
     gc -m "Updated ZSH functions"
   fi
 
+  gpush
   $PWD_VAR
 }
 
