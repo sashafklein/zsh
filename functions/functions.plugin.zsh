@@ -212,6 +212,10 @@ n () {
   fi
 }
 
+ns () {
+  npm start
+}
+
 nr () {
   n run "$@"
 }
