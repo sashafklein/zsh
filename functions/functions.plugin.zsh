@@ -38,6 +38,14 @@ gac () {
   gc "$@"
 }
 
+gbUnmerged () {
+  git branch --merged | egrep -v "(^\*|$@)"
+}
+
+gbDeleteUnmerged () {
+  git branch --merged | egrep -v "(^\*|$@)" | xargs git branch -d
+}
+
 gacm () gac -m "$@"
 
 ga () {
