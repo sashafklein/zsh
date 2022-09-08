@@ -170,7 +170,7 @@ drop () h Dropbox\ \(Personal\)/
 # ##############################
 
 dockup () {
-  source environment.sh && docker-compose down && sleep 1 && docker-compose up trefoil-setup && sleep 1 && docker-compose up trefoil-local
+  source environment.sh && docker-compose down && sleep 1 && docker-compose up trefoil-setup && sleep 1 && docker-compose up trefoil-server && docker-compose rm -sf trefoil-api && docker-compose up trefoil-api-dev
 }
 
 dockdown () {
@@ -261,6 +261,14 @@ zsh_push ()  {
   gpush
   $PWD_VAR
 }
+
+zsh_list () echo "
+  zsh_edit - edit the file
+  zsh_dir - move to the dir
+  zsh_refresh - reload
+  zsh_push - add, commit, and push
+  zshrc - open the file
+"
 
 zshrc () v ~/.zshrc
 
