@@ -31,7 +31,7 @@ grc () gr --continue
 
 gback () git reset HEAD\^
 
-gh () git open
+# gh () git open
 
 gac () {
   ga
@@ -165,9 +165,12 @@ h () cd $HOME/"$@"
 desk () h Desktop/"$@"
 drop () h Dropbox\ \(Personal\)/
 
+dc () docker compose "$@"
+
 # ##############################
 # ######### UNCHAINED ##########
 # ##############################
+
 
 dockup () {
   source environment.sh && docker-compose down && sleep 1 && docker-compose up trefoil-setup && sleep 1 && docker-compose up trefoil-local
