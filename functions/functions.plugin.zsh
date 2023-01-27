@@ -122,7 +122,7 @@ grb () git rebase "$@"
 
 g () git "$@"
 
-gcpick () git cherry-pick "$@"
+gcp () git cherry-pick "$@"
 
 grh () git reset --hard "$@"
 
