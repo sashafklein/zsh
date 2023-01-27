@@ -250,6 +250,7 @@ ys () {
 zsh_edit () v $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
 zsh_refresh () source ~/.zshrc
+zsh_reload () source ~/.zshrc
 zsh_push ()  {
   PWD_VAR=$(pwd)
   zsh_dir
