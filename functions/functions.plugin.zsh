@@ -247,6 +247,14 @@ ys () {
   yarn start
 }
 
+kport () {
+  if [ "$#" -gt 0 ]; then
+    sudo kill -9 $(sudo lsof -t -i:"$@")
+  else
+    echo "Please specify a port"
+  fi
+}
+
 zsh_edit () v $ZSH/custom/plugins/functions/functions.plugin.zsh
 zsh_dir () $ZSH/custom/plugins/
 zsh_refresh () source ~/.zshrc
