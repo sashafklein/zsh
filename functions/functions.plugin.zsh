@@ -249,7 +249,7 @@ ys () {
 
 kport () {
   if [ "$#" -gt 0 ]; then
-    sudo kill -9 $(sudo lsof -t -i:"$@")
+    npx kill-port "$@"
   else
     echo "Please specify a port"
   fi
