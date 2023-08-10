@@ -58,11 +58,11 @@ ga () {
 
 gp () {
   # For Unchained
-  if [[ ${PWD:A} =~ "unchained" ]]; then
+  if [[ ${PWD:A} =~ "unchained/trefoil" ]]; then
     br=$(git branch --show-current)
     echo "git pull upstream ${br}"
     git pull upstream "${br}"
-  else 
+  else
     git pull "$@"
   fi
 }
@@ -75,7 +75,17 @@ gss () git stash save
 
 grs () git restore --staged "$@"
 
-gl () git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "$@"
+gl () {
+  git log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit "$@"
+}
+
+gswitch () {
+  git switch -c "$@"
+}
+
+gtrack () {
+  gco "$@" && gswitch "$@"
+}
 
 gco () git checkout "$@"
 
