@@ -247,7 +247,7 @@ n () {
 }
 
 ns () {
-  npm start
+  n start
 }
 
 nr () {
