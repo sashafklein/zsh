@@ -222,14 +222,27 @@ co () {
 }
 
 v () {
-  co "$@"
+  if [ "$#" -gt 0 ]; then
+    cursor "$@"
+  else
+    cursor .
+  fi
 }
 
 n () {
-  if [ "$#" -gt 0 ]; then
-    npm "$@"
+  # If there's a bun.lockb in the directory, use bun
+  if [ -f "bun.lockb" ]; then
+    if [ "$#" -gt 0 ]; then
+      bun "$@"
+    else
+      bun install
+    fi
   else
-    npm install
+    if [ "$#" -gt 0 ]; then
+      npm "$@"
+    else
+      npm install
+    fi
   fi
 }
 
@@ -282,6 +295,10 @@ zsh_push ()  {
 
   gpush
   $PWD_VAR
+}
+
+bbr () {
+  bun --bun run "$@"
 }
 
 zsh_list () echo "
