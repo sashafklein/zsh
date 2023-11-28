@@ -213,19 +213,11 @@ tree () {
 
 tasks () { ps aux | grep "$@" }
 
-co () {
+v () {
   if [ "$#" -gt 0 ]; then
     code "$@"
   else
     code .
-  fi
-}
-
-v () {
-  if [ "$#" -gt 0 ]; then
-    cursor "$@"
-  else
-    cursor .
   fi
 }
 
