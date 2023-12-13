@@ -154,6 +154,16 @@ gwip () {
  git commit --no-verify -m 'WIP'
 }
 
+# Open branch in origin or upstream remote
+# or other remote if specified
+go () {
+  if [ "$#" -gt 0 ]; then
+    git remote -v | grep "$@" | head -n 1 | awk -F "@" '{print $2}' | awk -F " " '{print $1}' | sed 's/:/\//g' | sed 's/.git//g' | awk '{print "http://"$1}' | xargs open
+  else
+    git remote -v | grep -e origin -e upstream | grep fetch | head -n 1 | awk -F "@" '{print $2}' | awk -F " " '{print $1}' | sed 's/:/\//g' | sed 's/.git//g' | awk '{print "http://"$1}' | xargs open
+  fi
+}
+
 
 # ###############################
 # ######## CD SHORTCUTS #########
