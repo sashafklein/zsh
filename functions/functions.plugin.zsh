@@ -58,6 +58,19 @@ gbsu () {
   fi
 }
 
+gmk () {
+  if [ "$#" -eq 0 ]; then
+    echo "Please provide a commit name"
+  else
+    ga
+    gss
+    gp
+    gsp
+    ga
+    gc -m "$@"
+  fi
+}
+
 gacm () gac -m "$@"
 
 ga () {
