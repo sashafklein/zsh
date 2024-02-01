@@ -46,6 +46,18 @@ gbDeleteMerged () {
   git branch --merged | egrep -v "(^\*|$@)" | xargs git branch -d
 }
 
+# git branch --set-upstream-to={remote || "origin"}/{branch} {branch}
+gbsu () {
+  # Assign branch name to variable
+  branch=$(git branch --show-current)
+  # If there are no arguments, set the upstream to origin
+  if [ "$#" -eq 0 ]; then
+    git branch "--set-upstream-to=origin/$branch" "$@"
+  else
+    git branch "--set-upstream-to=$1/$branch" "$@"
+  fi
+}
+
 gacm () gac -m "$@"
 
 ga () {
@@ -191,14 +203,6 @@ dc () docker compose "$@"
 # ######### UNCHAINED ##########
 # ##############################
 
-
-dockup () {
-  source environment.sh && docker-compose down && sleep 1 && docker-compose up trefoil-setup && sleep 1 && docker-compose up trefoil-local
-}
-
-dockdown () {
-  source environment.sh && docker-compose down
-}
 
 ds () {
   source environment.sh && docker-compose run trefoil-setup python
