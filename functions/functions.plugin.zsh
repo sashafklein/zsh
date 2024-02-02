@@ -249,8 +249,8 @@ v () {
 }
 
 n () {
-  # If there's a bun.lockb in the directory, use bun
-  if [ -f "bun.lockb" ]; then
+  # If there's a bun.lockb in the directory AND there is no package-lock.json, use bun
+  if [ -f "bun.lock" ] && [ ! -f "package-lock.json" ]; then
     if [ "$#" -gt 0 ]; then
       bun "$@"
     else
