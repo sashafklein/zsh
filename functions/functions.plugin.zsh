@@ -192,6 +192,7 @@ go () {
 f () cd $HOME/code/"$@"
 
 work () f unchained/"$@"
+ts () f ts/"$@"
 
 
 notes () cd $HOME/Dropbox/Notes/"$@"
