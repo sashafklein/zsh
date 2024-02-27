@@ -2,7 +2,9 @@
 # ############ GIT #############
 # ##############################
 
-ktask () { kill -9 $(ps -x | grep "$@" | awk '{print $1}') }
+ktask () { 
+  kill -9 $(ps -x | grep "$@" | awk '{print $1}')
+}
 gcurrent () git rev-parse --abbrev-ref HEAD
 
 gclean! () git clean -f -d
@@ -82,14 +84,7 @@ ga () {
 }
 
 gp () {
-  # For Unchained
-  if [[ ${PWD:A} =~ "unchained/trefoil" ]]; then
-    br=$(git branch --show-current)
-    echo "git pull upstream ${br}"
-    git pull upstream "${br}"
-  else
-    git pull "$@"
-  fi
+  git pull "$@"
 }
 
 gs () git status "$@"
