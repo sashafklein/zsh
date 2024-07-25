@@ -2,9 +2,6 @@
 # ############ GIT #############
 # ##############################
 
-ktask () { 
-  kill -9 $(ps -x | grep "$@" | awk '{print $1}')
-}
 gcurrent () git rev-parse --abbrev-ref HEAD
 
 gclean! () git clean -f -d
@@ -232,6 +229,21 @@ emu () {
 # Prints out tree of all directories below this one
 tree () {
   ls -R | grep ":$" | sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'
+}
+
+ktask () { 
+  kill -9 $(ps -x | grep "$@" | awk '{print $1}')
+}
+
+kport() {
+  local port=$1
+  local pids=$(lsof -ti :$port)
+  if [ -z "$pids" ]; then
+    echo "No process found running on port $port."
+  else
+    echo "Killing processes on port $port: $pids"
+    kill -9 $pids
+  fi
 }
 
 tasks () { ps aux | grep "$@" }
