@@ -45,6 +45,78 @@ gbDeleteMerged () {
   git branch --merged | egrep -v "(^\*|$@)" | xargs git branch -d
 }
 
+gbcleanup () {
+  force_delete=false
+  excluded_branches=()
+
+  # Parse flags and arguments
+  while [[ "$1" != "" ]]; do
+    case $1 in
+      -e | --exclude )
+        shift
+        while [[ "$1" != "" && "$1" != -* ]]; do
+          excluded_branches+=("$1")
+          shift
+        done
+        ;;
+      -f | --force )
+        force_delete=true
+        shift
+        ;;
+      * )
+        echo "Unknown option: $1"
+        return 1
+        ;;
+    esac
+  done
+
+  # Echo the results of git branch into a temp-branches.txt file
+  git branch > temp-branches.txt
+
+  # Remove the current branch (denoted by *) from the list
+  sed -i '' '/\*/d' temp-branches.txt
+
+  # Remove the master and main branches from the list
+  sed -i '' '/master/d' temp-branches.txt
+  sed -i '' '/main/d' temp-branches.txt
+
+  # Read the branches into an array
+  branches=()
+  while IFS= read -r line; do
+    branches+=("$line")
+  done < temp-branches.txt
+
+  # Remove the excluded branches from the list
+  for excluded_branch in "${excluded_branches[@]}"; do
+    echo "Excluding branch $excluded_branch"
+    branches=("${branches[@]/$excluded_branch/}")
+  done
+
+  # If lines were excluded, echo an empty line
+  if [ ${#excluded_branches[@]} -gt 0 ]; then
+    echo ""
+  fi
+  
+  # Remove the temp-branches.txt file
+  rm temp-branches.txt
+
+  # Determine the git branch delete command
+  delete_flag="-d"
+  if [ "$force_delete" = true ]; then
+    delete_flag="-D"
+  fi
+
+  # Remove all branches that have been merged into the current branch
+  for branch in "${branches[@]}"; do
+    # Trim leading and trailing whitespace from the branch name
+    branch=$(echo $branch | xargs)
+    if [[ -n "$branch" ]]; then
+      # Execute the git delete command
+      git branch $delete_flag "$branch"
+    fi
+  done
+}
+
 # git branch --set-upstream-to={remote || "origin"}/{branch} {branch}
 gbsu () {
   # Assign branch name to variable
@@ -164,21 +236,46 @@ glc () {
 }
 
 go () {
-  git open
+  # If .git/config contains git@gitlab
+  if grep -q "git@gitlab" .git/config; then
+    # Save root path to variable
+    root="https://gitlab.ssvc.uncd.io"
+    # Save organization and project to variables
+    org=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $2}')
+    project=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $3}')
+
+    # Get MR number associated with branch
+    mr=$(git branch -vv | grep $(gcurrent) | awk '{print $3}')
+    echo "Opening $root/$org/$project/-/merge_requests/$mr"
+    branchPath="-/tree/$(gcurrent)"
+
+  # If .git/config does not contain git@gitlab
+  else
+    # Save root path to variable
+    root="https://github.com"
+
+    # Save organization and project to variables
+    org=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $2}')
+    project=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $3}')
+
+    # Path to branch on github
+    branchPath="tree/$(gcurrent)"
+  fi
+
+  # If branch is main or master, open the project
+  if [ "$(gcurrent)" = "main" ] || [ "$(gcurrent)" = "master" ]; then
+    echo "Opening $root/$org/$project"
+    open "$root/$org/$project"
+
+  # If branch is not main, open the branch
+  else
+    echo "Opening $root/$org/$project/$branchPath"
+    open "$root/$org/$project/$branchPath"
+  fi
 }
 
 gwip () {
  git commit --no-verify -m 'WIP'
-}
-
-# Open branch in origin or upstream remote
-# or other remote if specified
-go () {
-  if [ "$#" -gt 0 ]; then
-    git remote -v | grep "$@" | head -n 1 | awk -F "@" '{print $2}' | awk -F " " '{print $1}' | sed 's/:/\//g' | sed 's/.git//g' | awk '{print "http://"$1}' | xargs open
-  else
-    git remote -v | grep -e origin -e upstream | grep fetch | head -n 1 | awk -F "@" '{print $2}' | awk -F " " '{print $1}' | sed 's/:/\//g' | sed 's/.git//g' | awk '{print "http://"$1}' | xargs open
-  fi
 }
 
 
