@@ -289,7 +289,7 @@ gwip () {
 f () cd $HOME/code/"$@"
 
 work () f unchained/"$@"
-mine () f unchained/mine/"$@"
+mine () f mine/"$@"
 ts () f ts/"$@"
 
 
