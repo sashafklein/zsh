@@ -41,10 +41,11 @@ gbMerged () {
   git branch --merged | egrep -v "(^\*|$@)"
 }
 
-gbDeleteMerged () {
-  git branch --merged | egrep -v "(^\*|$@)" | xargs git branch -d
-}
-
+# Cleanup all except the current and master branches
+# Usage: `gbcleanup`
+# Flags:
+#   -e | --exclude: Exclude branches from deletion
+#   -f | --force: Force delete branches
 gbcleanup () {
   force_delete=false
   excluded_branches=()
@@ -96,7 +97,7 @@ gbcleanup () {
   if [ ${#excluded_branches[@]} -gt 0 ]; then
     echo ""
   fi
-  
+
   # Remove the temp-branches.txt file
   rm temp-branches.txt
 
@@ -129,6 +130,8 @@ gbsu () {
   fi
 }
 
+# Commit local changes on top of remote ones
+# Stash changes, pull from remote, pop stash, and commit changes
 gmk () {
   if [ "$#" -eq 0 ]; then
     echo "Please provide a commit name"
@@ -246,8 +249,8 @@ go () {
 
     # Get MR number associated with branch
     mr=$(git branch -vv | grep $(gcurrent) | awk '{print $3}')
-    echo "Opening $root/$org/$project/-/merge_requests/$mr"
-    branchPath="-/tree/$(gcurrent)"
+    echo "Opening $root/$org/$project/-/merge_requests"
+    branchPath="-/merge_requests"
 
   # If .git/config does not contain git@gitlab
   else
@@ -286,6 +289,7 @@ gwip () {
 f () cd $HOME/code/"$@"
 
 work () f unchained/"$@"
+mine () f unchained/mine/"$@"
 ts () f ts/"$@"
 
 
@@ -475,4 +479,41 @@ grayScale () {
     newPath="./grayscale${filename}"
     convert "${file}" -fx '(r+g+b)/3' -colorspace Gray $newPath
   done
+}
+
+# Usage: getHelp functionName
+# Searches for documentation comments above the specified function name and prints them.
+getHelp() {
+  local functionName=$1
+  # assign path to current file to variable
+  local file="/Users/sasha/.oh-my-zsh/custom/plugins/functions/functions.plugin.zsh"
+
+  # Check if the function name is provided
+  if [[ -z "$functionName" ]]; then
+    echo "Usage: getHelp functionName"
+    return 1
+  fi
+
+  # Search for the function definition and extract the comments above it
+  awk -v fn="$functionName" '
+    # Start recording comments if we encounter a line starting with "functionName ()" or "functionName()"
+    $0 ~ "^" fn "[[:space:]]*\\(\\)" {
+      found = 1
+    }
+    found && $0 !~ "^" fn "[[:space:]]*\\(\\)" && $0 ~ "^#" {
+      help = $0 "\n" help
+    }
+    found && $0 ~ "^" fn "[[:space:]]*\\(\\)" {
+      print help
+      exit
+    }
+    { help = "" }
+  ' "$file"
+
+  # If no comments were found, print an error message
+  if [[ -z "$help" ]]; then
+    echo "No documentation found for function $functionName"
+  else
+    echo "$help"
+  fi
 }
