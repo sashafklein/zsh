@@ -103,6 +103,20 @@ _get_function_info() {
     "flacToMP3") [[ $type == "desc" ]] && echo "Convert FLAC files to MP3" || echo "Other" ;;
     "grayScale") [[ $type == "desc" ]] && echo "Convert images to grayscale" || echo "Other" ;;
     "getHelp") [[ $type == "desc" ]] && echo "Get help for a specific function" || echo "Other" ;;
+    "renameBulk")
+      echo "Arguments:"
+      echo "  [--force|-f]: Actually perform the renaming (optional)"
+      echo "  pattern: Perl-style regex pattern with capture groups"
+      echo "  replacement: Replacement pattern using \$1, \$2, etc. for captured groups"
+      echo ""
+      echo "Example:"
+      echo "  renameBulk 'currentUsers(\d+\.\d+)\.svg' 'slide\$1.svg'"
+      echo "  This would rename 'currentUsers00.1.svg' to 'slide00.1.svg'"
+      echo ""
+      echo "Note: Do not include slashes in the pattern - they are added automatically"
+      echo "By default, this command only shows what would be renamed."
+      echo "Add --force to actually perform the renaming."
+      ;;
   esac
 }
 
@@ -1105,43 +1119,66 @@ grayScale () {
   done
 }
 
-# Usage: getHelp functionName
-# Searches for documentation comments above the specified function name and prints them.
-getHelp() {
+renameBulk () {
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "$1"
+    show_help "renameBulk"
     return 0
   fi
-  local functionName=$1
-  # assign path to current file to variable
-  local file="/Users/sasha/.oh-my-zsh/custom/plugins/functions/functions.plugin.zsh"
 
-  # Check if the function name is provided
-  if [[ -z "$functionName" ]]; then
-    echo "Usage: getHelp functionName"
+  local force=false
+  local pattern=""
+  local replacement=""
+
+  # Parse arguments
+  while [[ $# -gt 0 ]]; do
+    case $1 in
+      --force|-f)
+        force=true
+        shift
+        ;;
+      *)
+        if [[ -z "$pattern" ]]; then
+          pattern=$1
+        elif [[ -z "$replacement" ]]; then
+          replacement=$1
+        else
+          echo "Error: Too many arguments"
+          echo "Usage: renameBulk [--force] pattern replacement"
+          return 1
+        fi
+        shift
+        ;;
+    esac
+  done
+
+  # Check if required arguments are provided
+  if [[ -z "$pattern" || -z "$replacement" ]]; then
+    echo "Usage: renameBulk [--force] pattern replacement"
+    echo "Example: renameBulk 'currentUsers(\d+\.\d+)\.svg' 'slide\$1.svg'"
+    echo "Add --force to actually perform the renaming"
     return 1
   fi
 
-  # Search for the function definition and extract the comments above it
-  awk -v fn="$functionName" '
-    # Start recording comments if we encounter a line starting with "functionName ()" or "functionName()"
-    $0 ~ "^" fn "[[:space:]]*\\(\\)" {
-      found = 1
-    }
-    found && $0 !~ "^" fn "[[:space:]]*\\(\\)" && $0 ~ "^#" {
-      help = $0 "\n" help
-    }
-    found && $0 ~ "^" fn "[[:space:]]*\\(\\)" {
-      print help
-      exit
-    }
-    { help = "" }
-  ' "$file"
+  local changes_found=false
 
-  # If no comments were found, print an error message
-  if [[ -z "$help" ]]; then
-    echo "No documentation found for function $functionName"
-  else
-    echo "$help"
+  # Use perl to handle the renaming with regex capture groups
+  # Using # as delimiter instead of / to avoid conflicts with paths
+  for file in *; do
+    local newname=$(echo "$file" | perl -pe "s#$pattern#$replacement#")
+    if [[ "$file" != "$newname" ]]; then
+      changes_found=true
+      if [[ "$force" == true ]]; then
+        mv "$file" "$newname"
+        echo "Renamed: $file → $newname"
+      else
+        echo "Would rename: $file → $newname"
+      fi
+    fi
+  done
+
+  if [[ "$force" == false && "$changes_found" == true ]]; then
+    echo "\nThis was a dry run. Use --force to actually perform the renaming."
+  elif [[ "$changes_found" == false ]]; then
+    echo "No files matched the pattern."
   fi
 }
