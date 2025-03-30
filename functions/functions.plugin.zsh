@@ -6,7 +6,7 @@
 _get_function_info() {
   local func_name=$1
   local type=$2  # "desc" for description, "category" for category
-  
+
   case "$func_name" in
     # Git commands
     "gcurrent") [[ $type == "desc" ]] && echo "Get the current git branch name";;
@@ -124,14 +124,14 @@ _get_function_info() {
 show_help() {
   local func_name=$1
   local desc=$(_get_function_info "$func_name" "desc")
-  
+
   # Show description if available
   if [[ -n "$desc" ]]; then
     echo "$desc"
   fi
-  
+
   echo "Usage: $func_name [options]"
-  
+
   # Add any additional usage information for specific commands
   case "$func_name" in
     "gbcleanup")
@@ -161,16 +161,16 @@ zsh_functions() {
     show_help "zsh_functions"
     return 0
   fi
-  
+
   echo "Available functions:"
   echo "------------------"
-  
+
   # Get all function names
   local all_funcs=($(declare -f | grep '^[a-zA-Z_-]*\ ()' | cut -d' ' -f1))
-  
+
   # Sort functions by category
   local categories=("Git" "Directory" "Docker" "Utility" "ZSH" "Other")
-  
+
   for category in "${categories[@]}"; do
     echo "\n${category} commands:"
     for func in "${all_funcs[@]}"; do
@@ -914,6 +914,12 @@ n () {
       bun "$@"
     else
       bun install
+    fi
+  elif [ -f "pnpm-workspace.yaml" ]; then
+    if [ "$#" -gt 0 ]; then
+      pnpm "$@"
+    else
+      pnpm install
     fi
   else
     if [ "$#" -gt 0 ]; then
