@@ -6,7 +6,7 @@
 _get_function_info() {
   local func_name=$1
   local type=$2  # "desc" for description, "category" for category
-  
+
   case "$func_name" in
     # Git commands
     "gcurrent") [[ $type == "desc" ]] && echo "Get the current git branch name";;
@@ -77,14 +77,12 @@ _get_function_info() {
     "ktask") [[ $type == "desc" ]] && echo "Kill task by name" || echo "Utility" ;;
     "kport") [[ $type == "desc" ]] && echo "Kill process on port" || echo "Utility" ;;
     "tasks") [[ $type == "desc" ]] && echo "List tasks matching pattern" || echo "Utility" ;;
-    "tg") [[ $type == "desc" ]] && echo "Run terminal GPT" || echo "Utility" ;;
     "v") [[ $type == "desc" ]] && echo "Open in Cursor editor" || echo "Utility" ;;
     "n") [[ $type == "desc" ]] && echo "Run npm or bun command" || echo "Utility" ;;
     "ns") [[ $type == "desc" ]] && echo "Run npm/bun start" || echo "Utility" ;;
     "nr") [[ $type == "desc" ]] && echo "Run npm/bun script" || echo "Utility" ;;
     "nnuke") [[ $type == "desc" ]] && echo "Remove node_modules and lock file" || echo "Utility" ;;
     "y") [[ $type == "desc" ]] && echo "Run yarn command" || echo "Utility" ;;
-    "ys") [[ $type == "desc" ]] && echo "Run yarn start" || echo "Utility" ;;
     "bbr") [[ $type == "desc" ]] && echo "Run with bun runtime" || echo "Utility" ;;
 
     # ZSH management
@@ -124,14 +122,14 @@ _get_function_info() {
 show_help() {
   local func_name=$1
   local desc=$(_get_function_info "$func_name" "desc")
-  
+
   # Show description if available
   if [[ -n "$desc" ]]; then
     echo "$desc"
   fi
-  
+
   echo "Usage: $func_name [options]"
-  
+
   # Add any additional usage information for specific commands
   case "$func_name" in
     "gbcleanup")
@@ -161,16 +159,16 @@ zsh_functions() {
     show_help "zsh_functions"
     return 0
   fi
-  
+
   echo "Available functions:"
   echo "------------------"
-  
+
   # Get all function names
   local all_funcs=($(declare -f | grep '^[a-zA-Z_-]*\ ()' | cut -d' ' -f1))
-  
+
   # Sort functions by category
   local categories=("Git" "Directory" "Docker" "Utility" "ZSH" "Other")
-  
+
   for category in "${categories[@]}"; do
     echo "\n${category} commands:"
     for func in "${all_funcs[@]}"; do
@@ -879,18 +877,6 @@ tasks () {
   ps aux | grep "$@"
 }
 
-tg () {
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "tg"
-    return 0
-  fi
-  if [ "$#" -gt 0 ]; then
-    terminalgpt "$@"
-  else
-    terminalgpt
-  fi
-}
-
 v () {
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     show_help "v"
@@ -960,12 +946,8 @@ y () {
   fi
 }
 
-ys () {
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "ys"
-    return 0
-  fi
-  yarn start
+scratch () {
+  v $HOME/code/unchained/scratch.md
 }
 
 kport () {
