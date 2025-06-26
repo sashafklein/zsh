@@ -77,14 +77,12 @@ _get_function_info() {
     "ktask") [[ $type == "desc" ]] && echo "Kill task by name" || echo "Utility" ;;
     "kport") [[ $type == "desc" ]] && echo "Kill process on port" || echo "Utility" ;;
     "tasks") [[ $type == "desc" ]] && echo "List tasks matching pattern" || echo "Utility" ;;
-    "tg") [[ $type == "desc" ]] && echo "Run terminal GPT" || echo "Utility" ;;
     "v") [[ $type == "desc" ]] && echo "Open in Cursor editor" || echo "Utility" ;;
     "n") [[ $type == "desc" ]] && echo "Run npm or bun command" || echo "Utility" ;;
     "ns") [[ $type == "desc" ]] && echo "Run npm/bun start" || echo "Utility" ;;
     "nr") [[ $type == "desc" ]] && echo "Run npm/bun script" || echo "Utility" ;;
     "nnuke") [[ $type == "desc" ]] && echo "Remove node_modules and lock file" || echo "Utility" ;;
     "y") [[ $type == "desc" ]] && echo "Run yarn command" || echo "Utility" ;;
-    "ys") [[ $type == "desc" ]] && echo "Run yarn start" || echo "Utility" ;;
     "bbr") [[ $type == "desc" ]] && echo "Run with bun runtime" || echo "Utility" ;;
 
     # ZSH management
@@ -879,18 +877,6 @@ tasks () {
   ps aux | grep "$@"
 }
 
-tg () {
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "tg"
-    return 0
-  fi
-  if [ "$#" -gt 0 ]; then
-    terminalgpt "$@"
-  else
-    terminalgpt
-  fi
-}
-
 v () {
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     show_help "v"
@@ -982,12 +968,8 @@ y () {
   fi
 }
 
-ys () {
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "ys"
-    return 0
-  fi
-  yarn start
+scratch () {
+  v $HOME/code/unchained/scratch.md
 }
 
 kport () {
