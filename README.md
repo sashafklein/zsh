@@ -1,15 +1,14 @@
-# ZSH Setup
+# ZSH Settings and Plugins
 
-ZSH setup, to move from computer to computer.
+Common ZSH functions and plugins, to share between laptops.
 
-## Installation
+## Install
 
-Add ZSH.
-
-- Replace `~/.zshrc` with (modified) version of `example-zshrc`.
-- `cd ~/.oh-my-zsh/custom/plugins`
-- `git init`
-- Overwrite `.git/config`, with the contents of `example-git-config`.
-- `git pull`
-- Open a new tab
-- Install nvm and any other needed tools.
+1. Install ZSH Shell on new computer.
+2. Copy `.zshrc` from old to new computer. Modify as necessary.
+3. `cd .om-my-zsh/plugins`
+4. `git init`
+5. `nano .git/config`
+6. Replace remote line with `https://github.com/sashafklein/zsh.git`, and save.
+7. `git pull` to sync things up.
+8. Open a new shell tab. Correct any errors that arise.
