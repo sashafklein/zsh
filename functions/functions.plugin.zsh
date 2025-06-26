@@ -915,6 +915,18 @@ n () {
     else
       bun install
     fi
+  elif [ -f "yarn.lock" ]; then
+    if [ "$#" -gt 0 ]; then
+      yarn "$@"
+    else
+      yarn install
+    fi
+  elif [ -f "pnpm-lock.yaml" ]; then
+    if [ "$#" -gt 0 ]; then
+      pnpm "$@"
+    else
+      pnpm install
+    fi
   elif [ -f "pnpm-workspace.yaml" ]; then
     if [ "$#" -gt 0 ]; then
       pnpm "$@"
@@ -944,6 +956,10 @@ nr () {
     return 0
   fi
   n run "$@"
+}
+
+nd () {
+  nr dev
 }
 
 nnuke () {
