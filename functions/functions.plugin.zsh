@@ -725,6 +725,14 @@ work () {
   f unchained/"$@"
 }
 
+nb () {
+  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "nb/meta"
+    return 0
+  fi
+  cd $HOME/code/nb/meta/"$@"
+}
+
 mine () {
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
     show_help "mine"
