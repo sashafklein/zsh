@@ -727,10 +727,10 @@ work () {
 
 nb () {
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "nb/meta"
+    show_help "nb"
     return 0
   fi
-  cd $HOME/code/nb/meta/"$@"
+  cd $HOME/code/nb/"$@"
 }
 
 mine () {
