@@ -51,7 +51,7 @@ _get_function_info() {
     "gbdelete") [[ $type == "desc" ]] && echo "Delete branch from origin" || echo "Git" ;;
     "glt") [[ $type == "desc" ]] && echo "Get latest tag" || echo "Git" ;;
     "glc") [[ $type == "desc" ]] && echo "Get latest commit hash" || echo "Git" ;;
-    "go") [[ $type == "desc" ]] && echo "Open repository in browser" || echo "Git" ;;
+    "gopen") [[ $type == "desc" ]] && echo "Open repository in browser" || echo "Git" ;;
     "gwip") [[ $type == "desc" ]] && echo "Create WIP commit" || echo "Git" ;;
 
     # Directory commands
@@ -69,8 +69,6 @@ _get_function_info() {
     # Docker commands
     "dlogin") [[ $type == "desc" ]] && echo "Login to docker registries" || echo "Docker" ;;
     "ds") [[ $type == "desc" ]] && echo "Run trefoil-setup python container" || echo "Docker" ;;
-    "emu-shell") [[ $type == "desc" ]] && echo "Open emulator shell" || echo "Docker" ;;
-    "emu") [[ $type == "desc" ]] && echo "Run emulator" || echo "Docker" ;;
 
     # Utility commands
     "tree") [[ $type == "desc" ]] && echo "Print directory tree structure" || echo "Utility" ;;
@@ -653,9 +651,9 @@ glc () {
   git rev-parse --short HEAD
 }
 
-go () {
+gopen () {
   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "go"
+    show_help "gopen"
     return 0
   fi
   # If .git/config contains git@gitlab
@@ -812,6 +810,18 @@ dlogin () {
   done
 }
 
+dcbash () {
+  # if not in Trefoil dir, cd to it
+  if [ "$(basename "$(pwd)")" != "trefoil" ]; then
+    cd ~/code/trefoil
+  fi
+
+  echo "bin/trefoil-repl"
+  echo "o = Org.with_uuid(\"12345\")"
+  echo "dir(o)"
+  docker compose run trefoil-api-dev bash
+}
+
 # ##############################
 # ######### UNCHAINED ##########
 # ##############################
@@ -825,21 +835,21 @@ ds () {
   source environment.sh && docker-compose run trefoil-setup python
 }
 
-emu-shell () {
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "emu-shell"
-    return 0
-  fi
-  cd ~/cursor/unchained/trezor-firmware && python3 -m poetry shell
-}
+# emu-shell () {
+#   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+#     show_help "emu-shell"
+#     return 0
+#   fi
+#   cd ~/cursor/unchained/trezor-firmware && python3 -m poetry shell
+# }
 
-emu () {
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "emu"
-    return 0
-  fi
-  cd core && ./emu.py --mnemonic 'merge alley lucky axis penalty manage latin gasp virus captain wheel deal chase fragile chapter boss zero dirt stadium tooth physical valve kid plunge'
-}
+# emu () {
+#   if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+#     show_help "emu"
+#     return 0
+#   fi
+#   cd core && ./emu.py --mnemonic 'merge alley lucky axis penalty manage latin gasp virus captain wheel deal chase fragile chapter boss zero dirt stadium tooth physical valve kid plunge'
+# }
 
 # ##############################
 # ########### OTHER ############
