@@ -652,46 +652,15 @@ glc () {
 }
 
 gopen () {
-  if [[ "$1" == "-h" || "$1" == "--help" ]]; then
-    show_help "gopen"
-    return 0
-  fi
-  # If .git/config contains git@gitlab
-  if grep -q "git@gitlab" .git/config; then
-    # Save root path to variable
-    root="https://gitlab.ssvc.uncd.io"
-    # Save organization and project to variables
-    org=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $2}')
-    project=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $3}')
-
-    # Get MR number associated with branch
-    mr=$(git branch -vv | grep $(gcurrent) | awk '{print $3}')
-    echo "Opening $root/$org/$project/-/merge_requests"
-    branchPath="-/merge_requests"
-
-  # If .git/config does not contain git@gitlab
+  local url branch remote_url
+  remote_url=$(git remote get-url origin | sed 's|git@\(.*\):\(.*\)\.git|https://\1/\2|;s|\.git$||')
+  branch=$(git branch --show-current)
+  if [[ "$remote_url" == *github* ]]; then
+    url="$remote_url/pulls?q=head:$branch"
   else
-    # Save root path to variable
-    root="https://github.com"
-
-    # Save organization and project to variables
-    org=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $2}')
-    project=$(git remote -v | grep fetch | head -n 1 | awk '{print $2}' | sed 's/:/\//g' | sed 's/.git//g' | awk -F "/" '{print $3}')
-
-    # Path to branch on github
-    branchPath="tree/$(gcurrent)"
+    url="$remote_url/-/merge_requests?scope=all&state=opened&source_branch=$branch"
   fi
-
-  # If branch is main or master, open the project
-  if [ "$(gcurrent)" = "main" ] || [ "$(gcurrent)" = "master" ]; then
-    echo "Opening $root/$org/$project"
-    open "$root/$org/$project"
-
-  # If branch is not main, open the branch
-  else
-    echo "Opening $root/$org/$project/$branchPath"
-    open "$root/$org/$project/$branchPath"
-  fi
+  open "$url"
 }
 
 gwip () {
